@@ -66,6 +66,26 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <a href="admin.php" class="nav-link admin-link">Admin</a>
                 <?php endif; ?>
+                
+                <!-- Mobile Menu Actions -->
+                <div class="mobile-menu-actions">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="profile.php" class="nav-link mobile-action">
+                            <i data-feather="user"></i> Profile
+                        </a>
+                        <a href="orders.php" class="nav-link mobile-action">
+                            <i data-feather="package"></i> Pesanan
+                        </a>
+                        <a href="logout.php" class="nav-link mobile-action">
+                            <i data-feather="log-out"></i> Logout
+                        </a>
+                    <?php else: ?>
+                        <div class="mobile-auth-buttons">
+                            <a href="login.php" class="btn btn-outline mobile-auth-btn">Login</a>
+                            <a href="register.php" class="btn btn-primary mobile-auth-btn">Daftar</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="nav-actions">
