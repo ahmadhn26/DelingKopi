@@ -1134,30 +1134,57 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
                             <h2>Produk Terlaris</h2>
                         </div>
                         <div class="admin-card-content">
-                            <table class="top-products-table">
-                                <thead>
-                                    <tr>
-                                        <th>Nama Produk</th>
-                                        <th>Kategori</th>
-                                        <th>Terjual</th>
-                                        <th>Pendapatan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($dashboardStats['top_products'] as $product): ?>
+                            <!-- Desktop Table View -->
+                            <div class="data-table-container hide-mobile">
+                                <table class="top-products-table">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($product['item_name']); ?></td>
-                                            <td>
-                                                <span class="product-type-badge badge-<?php echo $product['item_type']; ?>">
-                                                    <?php echo ucfirst($product['item_type']); ?>
-                                                </span>
-                                            </td>
-                                            <td><?php echo $product['total_sold']; ?>x</td>
-                                            <td>Rp <?php echo number_format($product['total_revenue'], 0, ',', '.'); ?></td>
+                                            <th>Nama Produk</th>
+                                            <th>Kategori</th>
+                                            <th>Terjual</th>
+                                            <th>Pendapatan</th>
                                         </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($dashboardStats['top_products'] as $product): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($product['item_name']); ?></td>
+                                                <td>
+                                                    <span class="product-type-badge badge-<?php echo $product['item_type']; ?>">
+                                                        <?php echo ucfirst($product['item_type']); ?>
+                                                    </span>
+                                                </td>
+                                                <td><?php echo $product['total_sold']; ?>x</td>
+                                                <td>Rp <?php echo number_format($product['total_revenue'], 0, ',', '.'); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Mobile Card View -->
+                            <div class="mobile-card-layout show-mobile">
+                                <?php foreach ($dashboardStats['top_products'] as $product): ?>
+                                    <div class="mobile-card">
+                                        <div class="mobile-card-header">
+                                            <div class="mobile-card-title"><?php echo htmlspecialchars($product['item_name']); ?></div>
+                                            <span class="product-type-badge badge-<?php echo $product['item_type']; ?>">
+                                                <?php echo ucfirst($product['item_type']); ?>
+                                            </span>
+                                        </div>
+                                        <div class="mobile-card-content">
+                                            <div class="mobile-card-row">
+                                                <span class="mobile-card-label">Terjual:</span>
+                                                <span class="mobile-card-value"><?php echo $product['total_sold']; ?>x</span>
+                                            </div>
+                                            <div class="mobile-card-row">
+                                                <span class="mobile-card-label">Pendapatan:</span>
+                                                <span class="mobile-card-value">Rp <?php echo number_format($product['total_revenue'], 0, ',', '.'); ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                     
@@ -1237,49 +1264,96 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
                         <h2>Daftar Produk</h2>
                     </div>
                     <div class="admin-card-content">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Gambar</th>
-                                    <th>Nama</th>
-                                    <th>Harga</th>
-                                    <th>Stok</th>
-                                    <th>Deskripsi</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($products as $product): ?>
+                        <!-- Desktop Table View -->
+                        <div class="data-table-container hide-mobile">
+                            <table class="data-table">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
-                                        </td>
-                                        <td><?php echo htmlspecialchars($product['name']); ?></td>
-                                        <td>Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></td>
-                                        <td>
-                                            <span class="stock-badge <?php echo ($product['stock'] ?? 0) <= 5 ? 'stock-low' : 'stock-normal'; ?>">
-                                                <?php echo $product['stock'] ?? 0; ?>
-                                            </span>
-                                        </td>
-                                        <td><?php echo htmlspecialchars(substr($product['description'], 0, 50)) . '...'; ?></td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn btn-outline btn-small" onclick="editProduct(<?php echo htmlspecialchars(json_encode($product)); ?>)">
-                                                    <i data-feather="edit"></i>
-                                                </button>
-                                                <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
-                                                    <input type="hidden" name="action" value="delete_product">
-                                                    <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
-                                                    <button type="submit" class="btn btn-danger btn-small">
-                                                        <i data-feather="trash-2"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
+                                        <th>Gambar</th>
+                                        <th>Nama</th>
+                                        <th>Harga</th>
+                                        <th>Stok</th>
+                                        <th>Deskripsi</th>
+                                        <th>Aksi</th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($products as $product): ?>
+                                        <tr>
+                                            <td>
+                                                <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                            </td>
+                                            <td><?php echo htmlspecialchars($product['name']); ?></td>
+                                            <td>Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></td>
+                                            <td>
+                                                <span class="stock-badge <?php echo ($product['stock'] ?? 0) <= 5 ? 'stock-low' : 'stock-normal'; ?>">
+                                                    <?php echo $product['stock'] ?? 0; ?>
+                                                </span>
+                                            </td>
+                                            <td><?php echo htmlspecialchars(substr($product['description'], 0, 50)) . '...'; ?></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-outline btn-small" onclick="editProduct(<?php echo htmlspecialchars(json_encode($product)); ?>)">
+                                                        <i data-feather="edit"></i>
+                                                    </button>
+                                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                                        <input type="hidden" name="action" value="delete_product">
+                                                        <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
+                                                        <button type="submit" class="btn btn-danger btn-small">
+                                                            <i data-feather="trash-2"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Mobile Card View -->
+                        <div class="mobile-card-layout show-mobile">
+                            <?php foreach ($products as $product): ?>
+                                <div class="mobile-card">
+                                    <div class="mobile-card-header">
+                                        <div class="mobile-card-title"><?php echo htmlspecialchars($product['name']); ?></div>
+                                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                                    </div>
+                                    <div class="mobile-card-content">
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Harga:</span>
+                                            <span class="mobile-card-value">Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></span>
+                                        </div>
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Stok:</span>
+                                            <span class="mobile-card-value">
+                                                <span class="stock-badge <?php echo ($product['stock'] ?? 0) <= 5 ? 'stock-low' : 'stock-normal'; ?>">
+                                                    <?php echo $product['stock'] ?? 0; ?>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Deskripsi:</span>
+                                            <span class="mobile-card-value"><?php echo htmlspecialchars(substr($product['description'], 0, 30)) . '...'; ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-card-actions">
+                                        <div class="action-buttons">
+                                            <button class="btn btn-outline btn-small" onclick="editProduct(<?php echo htmlspecialchars(json_encode($product)); ?>)">
+                                                <i data-feather="edit"></i> Edit
+                                            </button>
+                                            <form method="POST" style="display: inline; flex: 1;" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                                <input type="hidden" name="action" value="delete_product">
+                                                <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
+                                                <button type="submit" class="btn btn-danger btn-small" style="width: 100%;">
+                                                    <i data-feather="trash-2"></i> Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1332,47 +1406,90 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
                         <h2>Daftar Menu</h2>
                     </div>
                     <div class="admin-card-content">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Gambar</th>
-                                    <th>Nama</th>
-                                    <th>Harga</th>
-                                    <th>Stok</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($menuItems as $menu): ?>
+                        <!-- Desktop Table View -->
+                        <div class="data-table-container hide-mobile">
+                            <table class="data-table">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <img src="<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>">
-                                        </td>
-                                        <td><?php echo htmlspecialchars($menu['name']); ?></td>
-                                        <td>Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?></td>
-                                        <td>
-                                            <span class="stock-badge <?php echo ($menu['stock'] ?? 0) <= 5 ? 'stock-low' : 'stock-normal'; ?>">
-                                                <?php echo $menu['stock'] ?? 0; ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn btn-outline btn-small" onclick="editMenu(<?php echo htmlspecialchars(json_encode($menu)); ?>)">
-                                                    <i data-feather="edit"></i>
-                                                </button>
-                                                <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus menu ini?')">
-                                                    <input type="hidden" name="action" value="delete_menu">
-                                                    <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
-                                                    <button type="submit" class="btn btn-danger btn-small">
-                                                        <i data-feather="trash-2"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
+                                        <th>Gambar</th>
+                                        <th>Nama</th>
+                                        <th>Harga</th>
+                                        <th>Stok</th>
+                                        <th>Aksi</th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($menuItems as $menu): ?>
+                                        <tr>
+                                            <td>
+                                                <img src="<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>">
+                                            </td>
+                                            <td><?php echo htmlspecialchars($menu['name']); ?></td>
+                                            <td>Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?></td>
+                                            <td>
+                                                <span class="stock-badge <?php echo ($menu['stock'] ?? 0) <= 5 ? 'stock-low' : 'stock-normal'; ?>">
+                                                    <?php echo $menu['stock'] ?? 0; ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-outline btn-small" onclick="editMenu(<?php echo htmlspecialchars(json_encode($menu)); ?>)">
+                                                        <i data-feather="edit"></i>
+                                                    </button>
+                                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus menu ini?')">
+                                                        <input type="hidden" name="action" value="delete_menu">
+                                                        <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
+                                                        <button type="submit" class="btn btn-danger btn-small">
+                                                            <i data-feather="trash-2"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Mobile Card View -->
+                        <div class="mobile-card-layout show-mobile">
+                            <?php foreach ($menuItems as $menu): ?>
+                                <div class="mobile-card">
+                                    <div class="mobile-card-header">
+                                        <div class="mobile-card-title"><?php echo htmlspecialchars($menu['name']); ?></div>
+                                        <img src="<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                                    </div>
+                                    <div class="mobile-card-content">
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Harga:</span>
+                                            <span class="mobile-card-value">Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?></span>
+                                        </div>
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Stok:</span>
+                                            <span class="mobile-card-value">
+                                                <span class="stock-badge <?php echo ($menu['stock'] ?? 0) <= 5 ? 'stock-low' : 'stock-normal'; ?>">
+                                                    <?php echo $menu['stock'] ?? 0; ?>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-card-actions">
+                                        <div class="action-buttons">
+                                            <button class="btn btn-outline btn-small" onclick="editMenu(<?php echo htmlspecialchars(json_encode($menu)); ?>)">
+                                                <i data-feather="edit"></i> Edit
+                                            </button>
+                                            <form method="POST" style="display: inline; flex: 1;" onsubmit="return confirm('Yakin ingin menghapus menu ini?')">
+                                                <input type="hidden" name="action" value="delete_menu">
+                                                <input type="hidden" name="id" value="<?php echo $menu['id']; ?>">
+                                                <button type="submit" class="btn btn-danger btn-small" style="width: 100%;">
+                                                    <i data-feather="trash-2"></i> Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1496,56 +1613,110 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
                         <h2>Kelola Pengguna</h2>
                     </div>
                     <div class="admin-card-content">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Terdaftar</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($users as $user): ?>
+                        <!-- Desktop Table View -->
+                        <div class="data-table-container hide-mobile">
+                            <table class="data-table">
+                                <thead>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($user['username']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['full_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                        <td>
-                                            <span class="role-badge role-<?php echo $user['role']; ?>">
-                                                <?php echo ucfirst($user['role']); ?>
-                                            </span>
-                                        </td>
-                                        <td><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn btn-outline btn-small" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
-                                                    <i data-feather="edit"></i>
-                                                </button>
-                                                <form method="POST" style="display: inline;" onsubmit="return confirm('Reset password pengguna ini?')">
-                                                    <input type="hidden" name="action" value="reset_password">
-                                                    <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
-                                                    <button type="submit" class="btn btn-outline btn-small">
-                                                        <i data-feather="key"></i>
+                                        <th>Username</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Terdaftar</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($users as $user): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($user['username']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['full_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                                            <td>
+                                                <span class="role-badge role-<?php echo $user['role']; ?>">
+                                                    <?php echo ucfirst($user['role']); ?>
+                                                </span>
+                                            </td>
+                                            <td><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-outline btn-small" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
+                                                        <i data-feather="edit"></i>
                                                     </button>
-                                                </form>
-                                                <?php if ($user['id'] != $_SESSION['user_id']): ?>
-                                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
-                                                        <input type="hidden" name="action" value="delete_user">
+                                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Reset password pengguna ini?')">
+                                                        <input type="hidden" name="action" value="reset_password">
                                                         <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
-                                                        <button type="submit" class="btn btn-danger btn-small">
-                                                            <i data-feather="trash-2"></i>
+                                                        <button type="submit" class="btn btn-outline btn-small">
+                                                            <i data-feather="key"></i>
                                                         </button>
                                                     </form>
-                                                <?php endif; ?>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                                    <?php if ($user['id'] != $_SESSION['user_id']): ?>
+                                                        <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                                            <input type="hidden" name="action" value="delete_user">
+                                                            <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+                                                            <button type="submit" class="btn btn-danger btn-small">
+                                                                <i data-feather="trash-2"></i>
+                                                            </button>
+                                                        </form>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Mobile Card View -->
+                        <div class="mobile-card-layout show-mobile">
+                            <?php foreach ($users as $user): ?>
+                                <div class="mobile-card">
+                                    <div class="mobile-card-header">
+                                        <div class="mobile-card-title"><?php echo htmlspecialchars($user['username']); ?></div>
+                                        <span class="role-badge role-<?php echo $user['role']; ?>">
+                                            <?php echo ucfirst($user['role']); ?>
+                                        </span>
+                                    </div>
+                                    <div class="mobile-card-content">
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Nama:</span>
+                                            <span class="mobile-card-value"><?php echo htmlspecialchars($user['full_name']); ?></span>
+                                        </div>
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Email:</span>
+                                            <span class="mobile-card-value"><?php echo htmlspecialchars($user['email']); ?></span>
+                                        </div>
+                                        <div class="mobile-card-row">
+                                            <span class="mobile-card-label">Terdaftar:</span>
+                                            <span class="mobile-card-value"><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-card-actions">
+                                        <div class="action-buttons">
+                                            <button class="btn btn-outline btn-small" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)">
+                                                <i data-feather="edit"></i> Edit
+                                            </button>
+                                            <form method="POST" style="display: inline;" onsubmit="return confirm('Reset password pengguna ini?')">
+                                                <input type="hidden" name="action" value="reset_password">
+                                                <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+                                                <button type="submit" class="btn btn-outline btn-small">
+                                                    <i data-feather="key"></i> Reset
+                                                </button>
+                                            </form>
+                                            <?php if ($user['id'] != $_SESSION['user_id']): ?>
+                                                <form method="POST" style="display: inline; flex: 1;" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                                    <input type="hidden" name="action" value="delete_user">
+                                                    <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+                                                    <button type="submit" class="btn btn-danger btn-small" style="width: 100%;">
+                                                        <i data-feather="trash-2"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>
