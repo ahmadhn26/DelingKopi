@@ -66,6 +66,28 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <a href="admin.php" class="nav-link admin-link">Admin</a>
                 <?php endif; ?>
+                
+                <!-- Mobile auth buttons (shown only in mobile menu) -->
+                <div class="mobile-auth-section">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="profile.php" class="nav-link mobile-nav-btn">
+                            <i data-feather="user"></i> Profile
+                        </a>
+                        <a href="orders.php" class="nav-link mobile-nav-btn">
+                            <i data-feather="package"></i> Pesanan
+                        </a>
+                        <a href="logout.php" class="nav-link mobile-nav-btn logout-link">
+                            <i data-feather="log-out"></i> Logout
+                        </a>
+                    <?php else: ?>
+                        <a href="login.php" class="nav-link mobile-nav-btn login-btn">
+                            <i data-feather="log-in"></i> Login
+                        </a>
+                        <a href="register.php" class="nav-link mobile-nav-btn register-btn">
+                            <i data-feather="user-plus"></i> Daftar
+                        </a>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="nav-actions">
@@ -84,31 +106,34 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                 </div>
 
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <!-- Profile -->
-                    <div class="action-container profile-container">
-                        <a href="profile.php" class="action-btn" title="Profile">
-                            <i data-feather="user"></i>
-                        </a>
-                    </div>
-                    <!-- Orders -->
-                    <div class="action-container orders-container">
-                        <a href="orders.php" class="action-btn" title="Pesanan">
-                            <i data-feather="package"></i>
-                        </a>
-                    </div>
-                    <!-- Logout -->
-                    <div class="action-container logout-container">
-                        <a href="logout.php" class="action-btn" title="Logout">
-                            <i data-feather="log-out"></i>
-                        </a>
-                    </div>
-                <?php else: ?>
-                    <div class="auth-buttons">
-                        <a href="login.php" class="btn btn-outline">Login</a>
-                        <a href="register.php" class="btn btn-primary">Daftar</a>
-                    </div>
-                <?php endif; ?>
+                <!-- Desktop user actions -->
+                <div class="desktop-actions">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <!-- Profile -->
+                        <div class="action-container profile-container">
+                            <a href="profile.php" class="action-btn" title="Profile">
+                                <i data-feather="user"></i>
+                            </a>
+                        </div>
+                        <!-- Orders -->
+                        <div class="action-container orders-container">
+                            <a href="orders.php" class="action-btn" title="Pesanan">
+                                <i data-feather="package"></i>
+                            </a>
+                        </div>
+                        <!-- Logout -->
+                        <div class="action-container logout-container">
+                            <a href="logout.php" class="action-btn" title="Logout">
+                                <i data-feather="log-out"></i>
+                            </a>
+                        </div>
+                    <?php else: ?>
+                        <div class="auth-buttons">
+                            <a href="login.php" class="btn btn-outline">Login</a>
+                            <a href="register.php" class="btn btn-primary">Daftar</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="hamburger" id="hamburger">
