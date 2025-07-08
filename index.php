@@ -50,60 +50,68 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="hidden" id="user-id" value="<?php echo $_SESSION['user_id']; ?>">
     <?php endif; ?>
 
-    <!-- Navigation -->
+    
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href=""><img src="img/logo.png" alt="Logo Website" ></a>
-            </div>
-            
-            <div class="nav-menu" id="nav-menu">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#about" class="nav-link">About Us</a>
-                <a href="#menu" class="nav-link">Menu</a>
-                <a href="#products" class="nav-link">Produk</a>
-                <a href="#contact" class="nav-link">Kontak</a>
-                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                    <a href="admin.php" class="nav-link admin-link">Admin</a>
-                <?php endif; ?>
-            </div>
+    <div class="nav-container">
+        <div class="nav-brand">
+            <a href="index.php"><img src="img/logo.png" alt="Logo Website"></a>
+        </div>
 
-            <div class="nav-actions">
-                <!-- Enhanced Modern Search -->
-                <div class="action-container search-container">
-                    <button class="action-btn search-toggle" id="search-toggle">
-                        <i data-feather="search"></i>
-                    </button>
-                </div>
-
-                <!-- Cart -->
-                <div class="action-container cart-container">
-                    <button class="action-btn cart-btn" id="cart-btn">
-                        <i data-feather="shopping-cart"></i>
-                        <span class="cart-count" id="cart-count">0</span>
-                    </button>
-                </div>
+        <div class="nav-menu" id="nav-menu">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#about" class="nav-link">About Us</a>
+            <a href="#menu" class="nav-link">Menu</a>
+            <a href="#products" class="nav-link">Produk</a>
+            <a href="#contact" class="nav-link">Kontak</a>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <a href="admin.php" class="nav-link admin-link">Admin</a>
+            <?php endif; ?>
 
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <!-- Profile -->
-                    <div class="action-container profile-container">
-                        <a href="profile.php" class="action-btn" title="Profile">
-                            <i data-feather="user"></i>
+                    <a href="logout.php" class="nav-link mobile-logout-link">Logout</a>
+                <?php endif; ?>
+
+            <?php
+            // Definisikan link untuk pengguna yang sudah login dalam satu array
+            $userLinks = [
+                ['href' => 'profile.php', 'icon' => 'user', 'label' => 'Profile'],
+                ['href' => 'orders.php', 'icon' => 'package', 'label' => 'Pesanan'],
+                ['href' => 'logout.php', 'icon' => 'log-out', 'label' => 'Logout', 'class' => 'logout-link']
+            ];
+            ?>
+        </div>
+
+        <div class="nav-actions">
+            <div class="action-container search-container">
+                <button class="action-btn search-toggle" id="search-toggle">
+                    <i data-feather="search"></i>
+                </button>
+            </div>
+
+            <div class="action-container cart-container">
+                <button class="action-btn cart-btn" id="cart-btn">
+                    <i data-feather="shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+
+            <div class="desktop-actions">
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    
+                    <?php foreach ($userLinks as $link): ?>
+                        <?php
+                            // Menyiapkan kelas dasar
+                            $classes = 'action-btn';
+                            // Jika ikonnya adalah log-out, tambahkan kelas khusus desktop
+                            if ($link['icon'] === 'log-out') {
+                                $classes .= ' desktop-logout-link';
+                            }
+                        ?>
+                        <a href="<?php echo $link['href']; ?>" class="<?php echo $classes; ?>" title="<?php echo $link['label']; ?>">
+                            <i data-feather="<?php echo $link['icon']; ?>"></i>
                         </a>
-                    </div>
-                    <!-- Orders -->
-                    <div class="action-container orders-container">
-                        <a href="orders.php" class="action-btn" title="Pesanan">
-                            <i data-feather="package"></i>
-                        </a>
-                    </div>
-                    <!-- Logout -->
-                    <div class="action-container logout-container">
-                        <a href="logout.php" class="action-btn" title="Logout">
-                            <i data-feather="log-out"></i>
-                        </a>
-                    </div>
-                <?php else: ?>
+                    <?php endforeach; ?>
+                    <?php else: ?>
                     <div class="auth-buttons">
                         <a href="login.php" class="btn btn-outline">Login</a>
                         <a href="register.php" class="btn btn-primary">Daftar</a>
@@ -112,25 +120,27 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        
-        <!-- Modern Enhanced Search Bar -->
-        <div class="search-bar" id="search-bar">
-            <div class="search-container">
-                <input type="text" 
-                       id="search-input" 
-                       placeholder="Temukan kopi dan produk favorit Anda..." 
-                       value="<?php echo htmlspecialchars($search); ?>" 
-                       autocomplete="off"
-                       spellcheck="false">
-                <!-- Live search suggestions will be inserted here by JavaScript -->
-            </div>
         </div>
-    </nav>
+
+
+    </div>
+
+    <div class="search-bar" id="search-bar">
+        <div class="search-container">
+            <input type="text" 
+                   id="search-input" 
+                   placeholder="Temukan kopi dan produk favorit Anda..." 
+                   value="<?php echo htmlspecialchars($search); ?>" 
+                   autocomplete="off"
+                   spellcheck="false">
+        </div>
+    </div>
+</nav>
+                
 
     <!-- Rest of your existing HTML content remains the same -->
     <!-- Hero Section -->

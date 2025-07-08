@@ -95,12 +95,13 @@ async function saveCart() {
 // Setup all event listeners
 // Setup all event listeners
   function setupEventListeners() {
-    // Hamburger menu
-    if (hamburger) {
-      hamburger.addEventListener("click", () => {
-        navMenu.classList.toggle("active")
-      })
-    }
+      // Hamburger menu
+  if (hamburger) {
+    hamburger.addEventListener("click", () => {
+      navMenu.classList.toggle("active")
+      hamburger.classList.toggle("active")
+    })
+  }
 
     // Close nav-menu when clicking outside
     document.addEventListener("click", (e) => {
@@ -108,6 +109,7 @@ async function saveCart() {
         // Pastikan klik tidak berada di dalam nav-menu atau hamburger
         if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
           navMenu.classList.remove("active")
+          hamburger.classList.remove("active")
         }
       }
     })
@@ -456,21 +458,38 @@ document.addEventListener("click", (e) => {
   }
 })
 
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault()
-    const target = document.querySelector(this.getAttribute("href"))
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
-    }
-    // Close mobile menu if open
-    if (navMenu) navMenu.classList.remove("active")
+  // Smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault()
+      const target = document.querySelector(this.getAttribute("href"))
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+             // Close mobile menu if open
+       if (navMenu) {
+         navMenu.classList.remove("active")
+         hamburger.classList.remove("active")
+       }
+    })
   })
-})
+
+       // Close mobile menu when clicking on mobile auth buttons (except for # links)
+     document.querySelectorAll('.mobile-nav-btn').forEach((button) => {
+       button.addEventListener("click", function (e) {
+         // Only close menu for actual page navigation (not # links)
+         if (!this.getAttribute("href").startsWith("#")) {
+           // Close mobile menu
+           if (navMenu) {
+             navMenu.classList.remove("active")
+             hamburger.classList.remove("active")
+           }
+         }
+       })
+     })
 
 // Navbar scroll effect
 window.addEventListener("scroll", () => {
