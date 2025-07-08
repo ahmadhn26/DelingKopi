@@ -589,7 +589,7 @@ section {
 }
 
 .stat-item:hover {
-  transform: translateY(-10px);
+  transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.15);
   box-shadow: var(--shadow-glow);
 }
@@ -1140,7 +1140,7 @@ section {
 }
 
 .admin-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.15);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
@@ -2243,4 +2243,44 @@ html {
 .out-of-stock .add-to-cart[disabled]:hover {
   transform: none;
   background: var(--neutral-gray-400);
+}
+
+
+/* =============================================== */
+/* == PERBAIKAN NAVBAR UNTUK LAYAR DIBAWAH 500px == */
+/* =============================================== */
+@media (max-width: 499px) {
+  /* Perkecil padding di container utama navbar */
+  .nav-container {
+    padding: 1rem 15px;
+    height: 70px; /* Sedikit mengurangi tinggi navbar */
+  }
+
+  /* Perkecil ukuran logo agar tidak terlalu dominan */
+  .nav-brand img {
+    max-width: 120px; /* Atur lebar maksimal logo */
+  }
+
+  /* Perkecil jarak antar ikon di kanan */
+  .nav-actions {
+    gap: 0.8rem;
+  }
+
+  /* Perkecil ukuran tombol Login & Daftar */
+  .auth-buttons .btn {
+    padding: 6px 10px; /* Perkecil padding tombol */
+    font-size: 0.8rem;  /* Perkecil ukuran font tombol */
+  }
+
+  /* Atur agar menu (jika dibuka) tidak menutupi seluruh layar */
+  .nav-menu {
+    width: 300px; /* Perkecil lebar sidebar menu */
+    right: -300px;
+  }
+
+  /* Atur agar search bar tidak terlalu lebar */
+  .search-bar {
+    max-width: calc(100vw - 30px); /* Lebar search bar = lebar layar - 30px */
+    right: 15px;
+  }
 }

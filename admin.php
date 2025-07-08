@@ -389,7 +389,7 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <?php /*<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> */?>
     <style>
         .admin-container {
             min-height: 100vh;
@@ -1105,6 +1105,7 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 
+                <?php /*
                 <!-- Charts Row -->
                 <div class="charts-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
                     <!-- Sales Chart -->
@@ -1123,6 +1124,7 @@ $transactions = $pdo->query($transactionsQuery)->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
+                */?>
                 
                 <!-- Bottom Section -->
                 <div class="bottom-section" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">

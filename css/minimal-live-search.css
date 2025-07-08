@@ -348,6 +348,7 @@
   }
 }
 
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .search-suggestions {
@@ -389,17 +390,19 @@
     border-color: #4b5563;
     color: #9ca3af;
   }
-
+  
   .search-container input {
     background: #1f2937;
     border-color: #374151;
     color: #f9fafb;
   }
+    
 
   .search-container input::placeholder {
     color: #6b7280;
   }
 }
+
 
 /* Accessibility */
 .search-suggestion-item:focus {
