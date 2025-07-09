@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $dbname = 'projec15_deling_kopi';
-$username = 'root';
+$username = 'projec15_root';
 $password = '@kaesquare123';
 
 try {
