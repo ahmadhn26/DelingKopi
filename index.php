@@ -50,104 +50,102 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="hidden" id="user-id" value="<?php echo $_SESSION['user_id']; ?>">
     <?php endif; ?>
 
-    
     <nav class="navbar">
-    <div class="nav-container">
-        <div class="nav-brand">
-            <a href="index.php"><img src="img/logo.png" alt="Logo Website"></a>
-        </div>
-
-        <div class="nav-menu" id="nav-menu">
-            <a href="#home" class="nav-link">Home</a>
-            <a href="#about" class="nav-link">About Us</a>
-            <a href="#menu" class="nav-link">Menu</a>
-            <a href="#products" class="nav-link">Produk</a>
-            <a href="#contact" class="nav-link">Kontak</a>
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                <a href="admin.php" class="nav-link admin-link">Admin</a>
-            <?php endif; ?>
-
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="logout.php" class="nav-link mobile-logout-link">Logout</a>
-                <?php endif; ?>
-
-            <?php
-            // Definisikan link untuk pengguna yang sudah login dalam satu array
-            $userLinks = [
-                ['href' => 'profile.php', 'icon' => 'user', 'label' => 'Profile'],
-                ['href' => 'orders.php', 'icon' => 'package', 'label' => 'Pesanan'],
-                ['href' => 'logout.php', 'icon' => 'log-out', 'label' => 'Logout', 'class' => 'logout-link']
-            ];
-            ?>
-        </div>
-
-        <div class="nav-actions">
-            <div class="action-container search-container">
-                <button class="action-btn search-toggle" id="search-toggle">
-                    <i data-feather="search"></i>
-                </button>
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.php"><img src="img/logo.png" alt="Logo Website"></a>
             </div>
 
-            <div class="action-container cart-container">
-                <button class="action-btn cart-btn" id="cart-btn">
-                    <i data-feather="shopping-cart"></i>
-                    <span class="cart-count" id="cart-count">0</span>
-                </button>
-            </div>
-
-            <div class="desktop-actions">
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    
-                    <?php foreach ($userLinks as $link): ?>
-                        <?php
-                            // Menyiapkan kelas dasar
-                            $classes = 'action-btn';
-                            // Jika ikonnya adalah log-out, tambahkan kelas khusus desktop
-                            if ($link['icon'] === 'log-out') {
-                                $classes .= ' desktop-logout-link';
-                            }
-                        ?>
-                        <a href="<?php echo $link['href']; ?>" class="<?php echo $classes; ?>" title="<?php echo $link['label']; ?>">
-                            <i data-feather="<?php echo $link['icon']; ?>"></i>
-                        </a>
-                    <?php endforeach; ?>
-                    <?php else: ?>
-                    <div class="auth-buttons">
+            <div class="nav-menu" id="nav-menu">
+                <!-- Auth buttons for mobile and tablet (shown only when not logged in) -->
+                <?php if (!isset($_SESSION['user_id'])): ?>
+                    <div class="auth-buttons mobile-auth-buttons">
                         <a href="login.php" class="btn btn-outline">Login</a>
                         <a href="register.php" class="btn btn-primary">Daftar</a>
                     </div>
                 <?php endif; ?>
+                
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About Us</a>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#products" class="nav-link">Produk</a>
+                <a href="#contact" class="nav-link">Kontak</a>
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                    <a href="admin.php" class="nav-link admin-link">Admin</a>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="logout.php" class="nav-link mobile-logout-link">Logout</a>
+                <?php endif; ?>
             </div>
 
-            <div class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+            <div class="nav-actions">
+                <div class="action-container search-container">
+                    <button class="action-btn search-toggle" id="search-toggle">
+                        <i data-feather="search"></i>
+                    </button>
+                </div>
+
+                <div class="action-container cart-container">
+                    <button class="action-btn cart-btn" id="cart-btn">
+                        <i data-feather="shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                </div>
+
+                <div class="desktop-actions">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <?php
+                        $userLinks = [
+                            ['href' => 'profile.php', 'icon' => 'user', 'label' => 'Profile'],
+                            ['href' => 'orders.php', 'icon' => 'package', 'label' => 'Pesanan'],
+                            ['href' => 'logout.php', 'icon' => 'log-out', 'label' => 'Logout', 'class' => 'logout-link']
+                        ];
+                        ?>
+                        <?php foreach ($userLinks as $link): ?>
+                            <?php
+                            $classes = 'action-btn';
+                            if ($link['icon'] === 'log-out') {
+                                $classes .= ' desktop-logout-link';
+                            }
+                            ?>
+                            <a href="<?php echo $link['href']; ?>" class="<?php echo $classes; ?>" title="<?php echo $link['label']; ?>">
+                                <i data-feather="<?php echo $link['icon']; ?>"></i>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="auth-buttons desktop-auth-buttons">
+                            <a href="login.php" class="btn btn-outline">Login</a>
+                            <a href="register.php" class="btn btn-primary">Daftar</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
+
+        <div class="search-bar" id="search-bar">
+            <div class="search-container">
+                <input type="text" 
+                       id="search-input" 
+                       placeholder="Temukan kopi dan produk favorit Anda..." 
+                       value="<?php echo htmlspecialchars($search); ?>" 
+                       autocomplete="off"
+                       spellcheck="false">
+            </div>
         </div>
+    </nav>
 
-
-    </div>
-
-    <div class="search-bar" id="search-bar">
-        <div class="search-container">
-            <input type="text" 
-                   id="search-input" 
-                   placeholder="Temukan kopi dan produk favorit Anda..." 
-                   value="<?php echo htmlspecialchars($search); ?>" 
-                   autocomplete="off"
-                   spellcheck="false">
-        </div>
-    </div>
-</nav>
-                
-
-    <!-- Rest of your existing HTML content remains the same -->
+    <!-- Rest of the HTML remains unchanged -->
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-              <h1>Secangkir Kopi, <span id="typing-text" class="typing-cursor"></span></h1>
-                <p>Rasakan kehangatan dan kekayaan cita rasa otentik dari dataran tinggi Mandailing.</p>
+            <h1>Secangkir Kopi, <span id="typing-text" class="typing-cursor"></span></h1>
+            <p>Rasakan kehangatan dan kekayaan cita rasa otentik dari dataran tinggi Mandailing.</p>
             <a href="#menu" class="btn btn-primary btn-large">Jelajahi Menu</a>
         </div>
     </section>
@@ -331,7 +329,6 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </section>
 
-    <!-- Rest of your existing sections remain the same -->
     <!-- Testimonials Section -->
     <section class="testimonial-section">
         <div class="container">
@@ -410,30 +407,30 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="contact-form">
-                <form id="contact-form" method="POST">
-                    <input type="text" name="name" placeholder="Nama Anda" required>
-                    <input type="email" name="email" placeholder="Email Anda" required>
-                    <textarea name="message" rows="4" placeholder="Pesan Anda" required></textarea>
-                    <button type="submit" class="btn btn-primary">Kirim Pesan</button>
-                </form>
+                    <form id="contact-form" method="POST">
+                        <input type="text" name="name" placeholder="Nama Anda" required>
+                        <input type="email" name="email" placeholder="Email Anda" required>
+                        <textarea name="message" rows="4" placeholder="Pesan Anda" required></textarea>
+                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                    </form>
                 </div>
             </div>
             
             <!-- Map Section -->
             <div class="map-section">
                 <div class="section-header">
-                <h2>Lokasi <span>Kami</span></h2>
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d179788.14439069518!2d106.73111856587569!3d-6.442202193959052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c3efc63ecc09%3A0xc74c10a339f311d!2sCafe%20and%20Restaurant%20Mandailing!5e0!3m2!1sid!2sid!4v1749912211761!5m2!1sid!2sid" 
-                            width="100%" 
-                            height="450" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
+                    <h2>Lokasi <span>Kami</span></h2>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d179788.14439069518!2d106.73111856587569!3d-6.442202193959052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c3efc63ecc09%3A0xc74c10a339f311d!2sCafe%20and%20Restaurant%20Mandailing!5e0!3m2!1sid!2sid!4v1749912211761!5m2!1sid!2sid" 
+                                width="100%" 
+                                height="450" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
                     </div>
+                </div>
             </div>
         </div>
     </section>
@@ -465,7 +462,7 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Deling Kopi. All rights reserved.</p>
+                <p>© 2025 Deling Kopi. All rights reserved.</p>
             </div>
         </div>
     </footer>

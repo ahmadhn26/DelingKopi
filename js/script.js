@@ -365,18 +365,20 @@ function updateCartUI() {
 }
 
 // Product detail modal
+// Product detail modal
 document.addEventListener("click", (e) => {
   if (e.target.closest(".product-detail")) {
-    const btn = e.target.closest(".product-detail")
+    const btn = e.target.closest(".product-detail");
     showProductModal({
       id: btn.dataset.id,
       name: btn.dataset.name,
       price: Number.parseInt(btn.dataset.price),
       description: btn.dataset.description,
       image: btn.dataset.image,
-    })
+      stock: Number.parseInt(btn.dataset.stock),
+    });
   }
-})
+});
 
 function showProductModal(product) {
   if (!productModal) return
@@ -729,3 +731,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+hamburger.addEventListener("click", () => {
+  console.log("Hamburger clicked");
+  navMenu.classList.toggle("active");
+  hamburger.classList.toggle("active");
+});
+
+document.addEventListener("click", (e) => {
+  if (navMenu && navMenu.classList.contains("active")) {
+    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+      console.log("Clicked outside nav-menu");
+      navMenu.classList.remove("active");
+      hamburger.classList.remove("active");
+    }
+  }
+});
+
+
+// In setupEventListeners() or at the end of script.js
+document.querySelectorAll('.mobile-auth-buttons .btn, .mobile-nav-btn').forEach((button) => {
+  button.addEventListener("click", function (e) {
+    // Only close menu for actual page navigation (not # links)
+    if (!this.getAttribute("href").startsWith("#")) {
+      // Close mobile menu
+      if (navMenu) {
+        navMenu.classList.remove("active");
+        hamburger.classList.remove("active");
+      }
+    }
+  });
+});
