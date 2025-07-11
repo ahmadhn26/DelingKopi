@@ -59,12 +59,14 @@
   box-sizing: border-box;
 }
 
-body {
+
+html, body {
   font-family: "Poppins", sans-serif;
   line-height: 1.6;
   color: var(--neutral-gray-50);
   background-color: var(--neutral-gray-900);
-  overflow-x: hidden;
+  width: 100%; /* Menegaskan lebar agar tidak lebih dari viewport */
+  overflow-x: hidden; /* Mencegah scroll horizontal */
 }
 
 .container {
@@ -1557,20 +1559,27 @@ section {
 .cart-sidebar {
   position: fixed;
   top: 0;
-  right: -400px;
+  right: 0;
   width: 400px;
   height: 100vh;
   background: var(--neutral-gray-800);
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
   z-index: 1001;
-  transition: right var(--transition-normal);
   display: flex;
   flex-direction: column;
   border-left: 2px solid var(--neutral-gray-700);
+  pointer-events: none;
+  touch-action: none;
+
+  /* === PERBAIKAN DI SINI === */
+  transform: translateX(100%); /* ✅ TAMBAHKAN: Ini yang menyembunyikan sidebar */
+  transition: transform var(--transition-normal); /* ✅ UBAH: Animasikan properti transform */
 }
 
 .cart-sidebar.active {
-  right: 0;
+  transform: translateX(0); /* Ini sudah benar, untuk memunculkan sidebar */
+  pointer-events: auto;
+  touch-action: auto;
 }
 
 .cart-header {
@@ -1859,6 +1868,31 @@ section {
 }
 
 
+/* Prevent accidental touch triggers on navigation elements */
+.hamburger {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cart-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent touch callouts and selections that might interfere */
+.nav-actions *,
+.hamburger *,
+.cart-btn * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 /* =============================================== */
 /* == RESPONSIVE DESIGN - COMPLETE REWRITE == */
 /* =============================================== */
@@ -1914,13 +1948,17 @@ section {
     /* Use transform for better performance */
     transform: translateX(100%);
     transition: transform var(--transition-normal);
-    /* Add touch-friendly properties */
+    /* Prevent accidental interactions when hidden */
+    pointer-events: none;
+    /* Add touch-friendly properties only when active */
     -webkit-overflow-scrolling: touch;
-    touch-action: manipulation;
   }
 
   .nav-menu.active {
     transform: translateX(0);
+    /* Restore interactions when active */
+    pointer-events: auto;
+    touch-action: manipulation;
   }
 
   .nav-link {
@@ -2004,6 +2042,8 @@ section {
     width: 280px;
     height: calc(100vh - 65px);
     padding-top: 0.5rem;
+    /* Ensure consistent behavior on tablets */
+    pointer-events: none;
   }
 
   .mobile-auth-buttons .btn {
@@ -2213,6 +2253,8 @@ section {
     top: 60px;
     height: calc(100vh - 60px);
     padding-top: 1rem;
+    /* Ensure consistent behavior on mobile */
+    pointer-events: none;
   }
 
   .menu-card {
@@ -2231,6 +2273,14 @@ section {
 
   .cart-sidebar {
     width: 100%;
+    /* Ensure consistent behavior on mobile */
+    pointer-events: none;
+  }
+  
+  .cart-sidebar.active {
+    /* Restore interactions when active on mobile */
+    pointer-events: auto;
+    touch-action: auto;
   }
 
   .cart-content {
