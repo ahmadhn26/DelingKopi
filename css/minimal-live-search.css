@@ -16,13 +16,16 @@
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  z-index: 1002;
+  z-index: 1004; /* Higher than search bar */
   max-height: 400px;
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
   transition: all 0.2s ease;
+  /* Add touch-friendly properties */
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
 }
 
 .search-suggestions.visible {
@@ -61,6 +64,9 @@
   border-bottom: 1px solid #f3f4f6;
   cursor: pointer;
   transition: background-color 0.15s ease;
+  /* Improve touch targets */
+  min-height: 44px;
+  touch-action: manipulation;
 }
 
 .search-suggestion-item:last-child {
@@ -219,8 +225,8 @@
 }
 
 .add-to-cart-suggestion {
-  width: 32px;
-  height: 32px;
+  width: 36px; /* Increased from 32px */
+  height: 36px; /* Increased from 32px */
   border: 1px solid #d1d5db;
   background: #ffffff;
   color: #6b7280;
@@ -230,6 +236,10 @@
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
+  /* Improve touch interaction */
+  touch-action: manipulation;
+  min-width: 36px;
+  min-height: 36px;
 }
 
 .add-to-cart-suggestion:hover {
@@ -316,11 +326,15 @@
     left: 0;
     right: 0;
     max-height: 300px;
+    /* Ensure proper touch scrolling */
+    -webkit-overflow-scrolling: touch;
   }
 
   .search-suggestion-item {
-    padding: 10px 12px;
+    padding: 12px;
     gap: 10px;
+    /* Ensure adequate touch targets */
+    min-height: 48px;
   }
 
   .suggestion-image {
@@ -337,14 +351,37 @@
   }
 
   .add-to-cart-suggestion {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
   }
 }
 
 @media (max-width: 480px) {
   .search-container {
-    max-width: 320px;
+    max-width: 100%;
+  }
+  
+  .search-suggestions {
+    max-height: 250px;
+  }
+  
+  .search-suggestion-item {
+    padding: 10px;
+    min-height: 44px;
+  }
+  
+  .suggestion-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .add-to-cart-suggestion {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
   }
 }
 
