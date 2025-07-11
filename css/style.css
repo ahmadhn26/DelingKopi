@@ -1567,10 +1567,16 @@ section {
   display: flex;
   flex-direction: column;
   border-left: 2px solid var(--neutral-gray-700);
+  /* Prevent accidental touch interactions */
+  pointer-events: none;
+  touch-action: none;
 }
 
 .cart-sidebar.active {
   right: 0;
+  /* Restore interactions when active */
+  pointer-events: auto;
+  touch-action: auto;
 }
 
 .cart-header {
@@ -1859,6 +1865,31 @@ section {
 }
 
 
+/* Prevent accidental touch triggers on navigation elements */
+.hamburger {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cart-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent touch callouts and selections that might interfere */
+.nav-actions *,
+.hamburger *,
+.cart-btn * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 /* =============================================== */
 /* == RESPONSIVE DESIGN - COMPLETE REWRITE == */
 /* =============================================== */
@@ -1914,13 +1945,17 @@ section {
     /* Use transform for better performance */
     transform: translateX(100%);
     transition: transform var(--transition-normal);
-    /* Add touch-friendly properties */
+    /* Prevent accidental interactions when hidden */
+    pointer-events: none;
+    /* Add touch-friendly properties only when active */
     -webkit-overflow-scrolling: touch;
-    touch-action: manipulation;
   }
 
   .nav-menu.active {
     transform: translateX(0);
+    /* Restore interactions when active */
+    pointer-events: auto;
+    touch-action: manipulation;
   }
 
   .nav-link {
@@ -2004,6 +2039,8 @@ section {
     width: 280px;
     height: calc(100vh - 65px);
     padding-top: 0.5rem;
+    /* Ensure consistent behavior on tablets */
+    pointer-events: none;
   }
 
   .mobile-auth-buttons .btn {
@@ -2213,6 +2250,8 @@ section {
     top: 60px;
     height: calc(100vh - 60px);
     padding-top: 1rem;
+    /* Ensure consistent behavior on mobile */
+    pointer-events: none;
   }
 
   .menu-card {
@@ -2231,6 +2270,14 @@ section {
 
   .cart-sidebar {
     width: 100%;
+    /* Ensure consistent behavior on mobile */
+    pointer-events: none;
+  }
+  
+  .cart-sidebar.active {
+    /* Restore interactions when active on mobile */
+    pointer-events: auto;
+    touch-action: auto;
   }
 
   .cart-content {

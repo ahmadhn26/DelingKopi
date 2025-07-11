@@ -127,11 +127,16 @@ async function saveCart() {
 
 // Setup all event listeners
 function setupEventListeners() {
-  // Hamburger menu with improved touch handling
+  // Hamburger menu - only use click events to prevent accidental triggers
   if (hamburger) {
-    // Use both click and touchstart for better mobile responsiveness
     hamburger.addEventListener("click", handleHamburgerToggle)
-    hamburger.addEventListener("touchstart", handleHamburgerToggle, { passive: true })
+    // Only add touch handling on actual mobile devices
+    if (isMobileDevice()) {
+      hamburger.addEventListener("touchend", (e) => {
+        e.preventDefault()
+        handleHamburgerToggle(e)
+      })
+    }
   }
 
   // Close nav-menu when clicking outside
@@ -144,19 +149,37 @@ function setupEventListeners() {
     }
   })
   
-  // Add touch event for better mobile handling
-  document.addEventListener("touchstart", (e) => {
-    if (navMenu && navMenu.classList.contains("active")) {
-      if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-        closeNavMenu()
+  // Only add touch outside handler for actual mobile devices
+  if (isMobileDevice()) {
+    let touchStartTarget = null
+    
+    document.addEventListener("touchstart", (e) => {
+      touchStartTarget = e.target
+    }, { passive: true })
+    
+    document.addEventListener("touchend", (e) => {
+      if (navMenu && navMenu.classList.contains("active")) {
+        // Only close if both touchstart and touchend were outside the menu/hamburger
+        if (touchStartTarget && e.target && 
+            !navMenu.contains(touchStartTarget) && !hamburger.contains(touchStartTarget) &&
+            !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          closeNavMenu()
+        }
       }
-    }
-  }, { passive: true })
+      touchStartTarget = null
+    }, { passive: true })
+  }
 
-  // Search functionality with improved touch handling
+  // Search functionality - use click primarily
   if (searchToggle) {
     searchToggle.addEventListener("click", handleSearchToggle)
-    searchToggle.addEventListener("touchstart", handleSearchToggle, { passive: true })
+    // Only add touch for mobile devices
+    if (isMobileDevice()) {
+      searchToggle.addEventListener("touchend", (e) => {
+        e.preventDefault()
+        handleSearchToggle(e)
+      })
+    }
   }
 
   if (searchInput) {
@@ -169,10 +192,6 @@ function setupEventListeners() {
     searchInput.addEventListener("click", (e) => {
       e.stopPropagation()
     })
-    
-    searchInput.addEventListener("touchstart", (e) => {
-      e.stopPropagation()
-    }, { passive: true })
   }
 
   // Close search when clicking outside
@@ -183,37 +202,46 @@ function setupEventListeners() {
       }
     }
   })
-  
-  // Add touch event for search closing
-  document.addEventListener("touchstart", (e) => {
-    if (searchBar && searchBar.classList.contains("active")) {
-      if (!searchBar.contains(e.target) && !searchToggle.contains(e.target)) {
-        searchBar.classList.remove("active")
-      }
-    }
-  }, { passive: true })
 
-  // Cart functionality with improved touch handling
+  // Cart functionality - use click primarily
   if (cartBtn) {
     cartBtn.addEventListener("click", openCart)
-    cartBtn.addEventListener("touchstart", openCart, { passive: true })
+    // Only add touch for mobile devices
+    if (isMobileDevice()) {
+      cartBtn.addEventListener("touchend", (e) => {
+        e.preventDefault()
+        openCart(e)
+      })
+    }
   }
 
   if (closeCart) {
     closeCart.addEventListener("click", closeCartSidebar)
-    closeCart.addEventListener("touchstart", closeCartSidebar, { passive: true })
+    if (isMobileDevice()) {
+      closeCart.addEventListener("touchend", (e) => {
+        e.preventDefault()
+        closeCartSidebar(e)
+      })
+    }
   }
 
   if (cartOverlay) {
     cartOverlay.addEventListener("click", closeCartSidebar)
-    cartOverlay.addEventListener("touchstart", closeCartSidebar, { passive: true })
+    if (isMobileDevice()) {
+      cartOverlay.addEventListener("touchend", closeCartSidebar)
+    }
   }
 
-  // Close modal events with touch support
+  // Close modal events
   const closeModalBtn = document.querySelector(".close-modal")
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", closeModal)
-    closeModalBtn.addEventListener("touchstart", closeModal, { passive: true })
+    if (isMobileDevice()) {
+      closeModalBtn.addEventListener("touchend", (e) => {
+        e.preventDefault()
+        closeModal(e)
+      })
+    }
   }
 
   if (productModal) {
@@ -222,12 +250,14 @@ function setupEventListeners() {
         closeModal()
       }
     })
-    productModal.addEventListener("touchstart", (e) => {
-      if (e.target === productModal) {
-        closeModal()
-      }
-    }, { passive: true })
   }
+}
+
+// Helper function to detect mobile devices
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+         window.innerWidth <= 768 || 
+         ('ontouchstart' in window && window.innerWidth <= 1024)
 }
 
 // Helper functions for better mobile handling
