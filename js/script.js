@@ -33,8 +33,41 @@ document.addEventListener("DOMContentLoaded", () => {
   loadUserCart()
   setupEventListeners()
   setupMenuCarousel()
+  
+  // Ensure proper mobile initialization
+  initializeMobileOptimizations()
+  
   feather.replace()
 })
+
+// Add mobile optimizations
+function initializeMobileOptimizations() {
+  // Force navbar to be responsive immediately
+  const navbar = document.querySelector(".navbar")
+  if (navbar) {
+    // Add initial background for mobile devices
+    if (window.innerWidth <= 768) {
+      navbar.classList.add("scrolled")
+    }
+  }
+  
+  // Ensure touch events are properly handled
+  document.body.style.touchAction = 'manipulation'
+  
+  // Add viewport-based optimizations
+  if (window.innerWidth <= 480) {
+    document.documentElement.style.setProperty('--touch-target-min', '44px')
+  }
+  
+  // Optimize for mobile browsers
+  if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    document.body.classList.add('mobile-device')
+    
+    // Improve touch scrolling
+    document.addEventListener('touchstart', function() {}, { passive: true })
+    document.addEventListener('touchmove', function() {}, { passive: true })
+  }
+}
 
 // Check login status and get user ID
 function checkLoginStatus() {
@@ -93,34 +126,37 @@ async function saveCart() {
 }
 
 // Setup all event listeners
-// Setup all event listeners
-  function setupEventListeners() {
-      // Hamburger menu
+function setupEventListeners() {
+  // Hamburger menu with improved touch handling
   if (hamburger) {
-    hamburger.addEventListener("click", () => {
-      navMenu.classList.toggle("active")
-      hamburger.classList.toggle("active")
-    })
+    // Use both click and touchstart for better mobile responsiveness
+    hamburger.addEventListener("click", handleHamburgerToggle)
+    hamburger.addEventListener("touchstart", handleHamburgerToggle, { passive: true })
   }
 
-    // Close nav-menu when clicking outside
-    document.addEventListener("click", (e) => {
-      if (navMenu && navMenu.classList.contains("active")) {
-        // Pastikan klik tidak berada di dalam nav-menu atau hamburger
-        if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-          navMenu.classList.remove("active")
-          hamburger.classList.remove("active")
-        }
+  // Close nav-menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (navMenu && navMenu.classList.contains("active")) {
+      // Ensure click is not within nav-menu or hamburger
+      if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        closeNavMenu()
       }
-    })
+    }
+  })
+  
+  // Add touch event for better mobile handling
+  document.addEventListener("touchstart", (e) => {
+    if (navMenu && navMenu.classList.contains("active")) {
+      if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        closeNavMenu()
+      }
+    }
+  }, { passive: true })
 
-  // Search functionality
+  // Search functionality with improved touch handling
   if (searchToggle) {
-    searchToggle.addEventListener("click", (e) => {
-      e.stopPropagation()
-      searchBar.classList.add("active")
-      searchInput.focus()
-    })
+    searchToggle.addEventListener("click", handleSearchToggle)
+    searchToggle.addEventListener("touchstart", handleSearchToggle, { passive: true })
   }
 
   if (searchInput) {
@@ -133,6 +169,10 @@ async function saveCart() {
     searchInput.addEventListener("click", (e) => {
       e.stopPropagation()
     })
+    
+    searchInput.addEventListener("touchstart", (e) => {
+      e.stopPropagation()
+    }, { passive: true })
   }
 
   // Close search when clicking outside
@@ -143,26 +183,37 @@ async function saveCart() {
       }
     }
   })
+  
+  // Add touch event for search closing
+  document.addEventListener("touchstart", (e) => {
+    if (searchBar && searchBar.classList.contains("active")) {
+      if (!searchBar.contains(e.target) && !searchToggle.contains(e.target)) {
+        searchBar.classList.remove("active")
+      }
+    }
+  }, { passive: true })
 
-  // Cart functionality
+  // Cart functionality with improved touch handling
   if (cartBtn) {
     cartBtn.addEventListener("click", openCart)
+    cartBtn.addEventListener("touchstart", openCart, { passive: true })
   }
 
   if (closeCart) {
     closeCart.addEventListener("click", closeCartSidebar)
+    closeCart.addEventListener("touchstart", closeCartSidebar, { passive: true })
   }
 
   if (cartOverlay) {
     cartOverlay.addEventListener("click", closeCartSidebar)
-    
+    cartOverlay.addEventListener("touchstart", closeCartSidebar, { passive: true })
   }
 
-
-  // Close modal events
+  // Close modal events with touch support
   const closeModalBtn = document.querySelector(".close-modal")
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", closeModal)
+    closeModalBtn.addEventListener("touchstart", closeModal, { passive: true })
   }
 
   if (productModal) {
@@ -171,7 +222,47 @@ async function saveCart() {
         closeModal()
       }
     })
+    productModal.addEventListener("touchstart", (e) => {
+      if (e.target === productModal) {
+        closeModal()
+      }
+    }, { passive: true })
   }
+}
+
+// Helper functions for better mobile handling
+function handleHamburgerToggle(e) {
+  e.preventDefault()
+  e.stopPropagation()
+  
+  navMenu.classList.toggle("active")
+  hamburger.classList.toggle("active")
+  
+  // Prevent body scroll when menu is open on mobile
+  if (navMenu.classList.contains("active")) {
+    document.body.style.overflow = "hidden"
+  } else {
+    document.body.style.overflow = "auto"
+  }
+}
+
+function closeNavMenu() {
+  navMenu.classList.remove("active")
+  hamburger.classList.remove("active")
+  document.body.style.overflow = "auto"
+}
+
+function handleSearchToggle(e) {
+  e.preventDefault()
+  e.stopPropagation()
+  
+  searchBar.classList.add("active")
+  // Small delay to ensure proper rendering before focus
+  setTimeout(() => {
+    if (searchInput) {
+      searchInput.focus()
+    }
+  }, 100)
 }
 
 // Menu Carousel Setup
@@ -493,11 +584,56 @@ document.addEventListener("click", (e) => {
        })
      })
 
-// Navbar scroll effect
+// Navbar scroll effect with improved mobile handling
 window.addEventListener("scroll", () => {
   const navbar = document.querySelector(".navbar")
   if (navbar) {
-    navbar.classList.toggle("scrolled", window.scrollY > 100)
+    if (window.scrollY > 50 || window.innerWidth <= 768) {
+      navbar.classList.add("scrolled")
+    } else {
+      navbar.classList.remove("scrolled")
+    }
+  }
+})
+
+// Handle orientation change and resize events for mobile
+window.addEventListener("orientationchange", () => {
+  setTimeout(() => {
+    const navbar = document.querySelector(".navbar")
+    if (navbar && window.innerWidth <= 768) {
+      navbar.classList.add("scrolled")
+    }
+    
+    // Close mobile menu on orientation change
+    if (navMenu && navMenu.classList.contains("active")) {
+      closeNavMenu()
+    }
+    
+    // Close search bar on orientation change
+    if (searchBar && searchBar.classList.contains("active")) {
+      searchBar.classList.remove("active")
+    }
+  }, 100)
+})
+
+window.addEventListener("resize", () => {
+  const navbar = document.querySelector(".navbar")
+  
+  // Ensure navbar has proper styling on mobile
+  if (window.innerWidth <= 768) {
+    navbar?.classList.add("scrolled")
+  } else if (window.scrollY <= 50) {
+    navbar?.classList.remove("scrolled")
+  }
+  
+  // Close mobile elements when resizing to desktop
+  if (window.innerWidth > 1024) {
+    if (navMenu && navMenu.classList.contains("active")) {
+      closeNavMenu()
+    }
+    if (searchBar && searchBar.classList.contains("active")) {
+      searchBar.classList.remove("active")
+    }
   }
 })
 
