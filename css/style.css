@@ -179,15 +179,9 @@ h3 {
   position: fixed;
   top: 0;
   width: 100%;
-  max-width: 100vw;
-  background: rgba(1, 1, 1, 0.95); /* Start with semi-transparent background */
-  backdrop-filter: blur(10px); /* Add backdrop filter from start */
-  border-bottom: 1px solid rgba(102, 102, 102, 0.2); /* Subtle border */
+  background-color: transparent;
   z-index: 1000;
-  transition: all var(--transition-normal);
-  /* Add touch-friendly properties */
-  -webkit-overflow-scrolling: touch;
-  touch-action: manipulation;
+  transition: background var(--transition-normal);
 }
 
 .navbar.scrolled {
@@ -2036,6 +2030,7 @@ section {
   .hamburger {
     margin-left: 0.5rem;
   }
+
 
   .nav-menu {
     top: 65px;
